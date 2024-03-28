@@ -6,6 +6,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -66,8 +67,6 @@ namespace Plant
 
         // brushes and pens
         Pen whitePen = new Pen(Color.White);
-
-        Brush greenBrush = new SolidBrush(Color.DarkGreen);
         Brush zombieBrush = new SolidBrush(Color.DarkOliveGreen);
         Brush zombie2Brush = new SolidBrush(Color.ForestGreen);
         Brush zombie3Brush = new SolidBrush(Color.LimeGreen);
@@ -80,6 +79,11 @@ namespace Plant
 
         //stopwatch
         public static Stopwatch survivalTimer = new Stopwatch();
+
+        // sound player
+
+        SoundPlayer sound = new SoundPlayer(Properties.Resources.GrassWalk);
+
         // plant bools
 
         public static bool peaBool = false;
@@ -129,6 +133,7 @@ namespace Plant
         public void InitializeGame()
         {
 
+
             Width = this.Width;
             // find a way to make a region grid for suitable plants positions
             // 5 lanes 9 plant spots
@@ -156,7 +161,7 @@ namespace Plant
             }
             //start survivalTimer
             survivalTimer.Start();
-            
+            sound.Play();
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)
@@ -241,15 +246,23 @@ namespace Plant
             {
                 if (z.x < 0)
                 {
+                    #region New Game Resets
                     // stop game timer
                     gameTimer.Stop();
-                    // clear lists to save resources
-                    sunList.Clear();
-                    pShootList.Clear();
-                    pShootProjectileList.Clear();
-                    sunFlowerList.Clear();
-                    pRegionList.Clear();
 
+                    sound.Stop();
+                     sunValue = 50;
+                    plantsPlaced = 0;
+                    sunCollected = 0;
+                    sunSpent = 0;
+                    zombiesKilled = 0;
+                    survivalTimer.Reset();
+                    pShootList.Clear();
+                    sunFlowerList.Clear();
+                    zombieList.Clear();
+                    sunList.Clear();
+                    pRegionList.Clear();
+                    #endregion
 
                     sunValue = 25;
 
